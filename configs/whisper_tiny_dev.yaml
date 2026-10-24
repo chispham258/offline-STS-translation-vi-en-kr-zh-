@@ -1,0 +1,28 @@
+# Development / testing configuration — NOT a benchmark default (D27).
+#
+# whisper-tiny is here for a fast local loop and because it is the checkpoint
+# the test suite already downloads. Its numbers are not comparable with the
+# reference configuration and must not be reported as benchmark results.
+#
+# The benchmark default is configs/whisper_vi_en.yaml (whisper-small).
+experiment:
+  name: whisper_tiny_dev
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: whisper
+  params:
+    model_name: openai/whisper-tiny
+    device: cpu
+
+mt:
+  model: identity
+
+tts:
+  model: silence

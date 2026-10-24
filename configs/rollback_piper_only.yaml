@@ -1,0 +1,27 @@
+# Rollback target for the Piper TTS integration (D26).
+#
+# If Piper fails its gate or proves unstable, this is the documented revert:
+# every stage back to a dummy, pipeline still runs and still scores. Exercised
+# automatically by tests/test_rollback.py's glob, so the path is proven rather
+# than claimed.
+experiment:
+  name: rollback_piper_only
+  notes: >-
+    All-dummy rollback target for the Piper integration. Produces no meaningful
+    quality or latency figures by design.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: silence

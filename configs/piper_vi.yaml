@@ -1,0 +1,34 @@
+# Piper TTS — the primary Vietnamese baseline (D23).
+#
+# Run against fixtures/mini_vi_en/refs.jsonl, whose target language is English.
+# Piper's Vietnamese voice therefore synthesizes English text here, which is
+# linguistically wrong but mechanically valid: this config exists to exercise
+# the 22.05 kHz output path through a 16 kHz pipeline, not to produce listenable
+# audio. A real en->vi run needs an en->vi manifest, which arrives with the
+# corpus in Task 8.
+experiment:
+  name: piper_vi
+  notes: >-
+    Exercises the Piper 22.05 kHz output path against a 16 kHz fixture set whose
+    target language is English. The Vietnamese voice is reading English text, so
+    the audio is not representative and must not be used for any quality
+    judgement. Latency and sample-rate handling are the only meaningful signals
+    here.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: piper
+  params:
+    voice: vi_VN-vais1000-medium

@@ -1,0 +1,46 @@
+# Pivot composite over the same vi->en manifest as opus_vi_en.yaml, so all
+# four Task 5 backends (opus, pivot, m2m100, nllb) are comparable on the
+# identical fixture. D13's real pivot directions (vi->zh, vi->ko) have no
+# vi->en counterpart to pivot through - direct Opus models already cover
+# vi<->en, and no vi->X model exists that lands back in English (Opus
+# coverage is asymmetric: opus-mt-zh-vi exists but not opus-mt-vi-zh; the
+# ko route needs opus-mt-vi-en as its own first leg, which would be
+# circular). So the second leg here is the identity no-op: this exercises
+# PivotMT's composition path (D12) with one real model call, giving quality
+# equal to the direct opus leg by construction and a latency figure that is
+# composition overhead only - not the double-real-model cost a genuine
+# vi->zh/vi->ko pivot pays. That number needs Task 7's real corpus.
+experiment:
+  name: pivot_vi_en
+  notes: >-
+    This configuration measures PivotMT composition overhead and correctness,
+    NOT translation quality across two MT models. The second leg is IdentityMT
+    (a no-op), so BLEU and chrF equal the direct opus backend by construction
+    and the latency is one real model call plus composition cost. It is not
+    evidence that pivot translation matches direct translation; a genuine
+    vi-zh or vi-ko pivot pays two real model calls and compounds their errors.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: pivot
+  params:
+    first:
+      model: opus
+      params:
+        model_name: Helsinki-NLP/opus-mt-vi-en
+        src_lang: vi
+        tgt_lang: en
+    second:
+      model: identity
+
+tts:
+  model: silence

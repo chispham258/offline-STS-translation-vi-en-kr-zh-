@@ -1,0 +1,12 @@
+%%{init: {"flowchart": {"nodeSpacing": 15, "rankSpacing": 20, "diagramPadding": 4}}}%%
+%% Architecture: cascade VAD -> ASR -> MT -> TTS, horizontal layout.
+%% Source of truth for docs/diagrams/architecture.svg.
+%% ASR runs on the source language; TTS selects the target-language voice.
+%% Queue sizes are in docs/ARCHITECTURE.md.
+%% Render: scripts/render_diagrams.sh
+flowchart LR
+    IN(["audio in<br/>16 kHz"]) --> VAD["VAD<br/>Silero"]
+    VAD --> ASR["ASR<br/>wav2vec2 / Whisper"]
+    ASR --> MT["MT<br/>envit5 / madlad"]
+    MT --> TTS["TTS<br/>Piper / VieNeu"]
+    TTS --> OUT(["audio out"])

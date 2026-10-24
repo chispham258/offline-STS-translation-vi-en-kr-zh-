@@ -1,0 +1,3 @@
+{"utt_id": "utt-001", "audio_path": "audio/utt-001.wav", "src_lang": "vi", "tgt_lang": "en", "src_text": "Xin chào, anh khỏe không?", "ref_text": "Hello, how are you?", "speech_start_s": 0.2, "speech_end_s": 1.8}
+{"utt_id": "utt-002", "audio_path": "audio/utt-002.wav", "src_lang": "vi", "tgt_lang": "en", "src_text": "Cái băng chuyền bị hỏng rồi.", "ref_text": "The conveyor belt is broken.", "speech_start_s": 0.3, "speech_end_s": 2.4}
+{"utt_id": "utt-003", "audio_path": "audio/utt-003.wav", "src_lang": "vi", "tgt_lang": "en", "src_text": "Anh có thấy đồ bảo hộ của tôi không?", "ref_text": "Have you seen my safety gear?", "speech_start_s": 0.1, "speech_end_s": 2.9}

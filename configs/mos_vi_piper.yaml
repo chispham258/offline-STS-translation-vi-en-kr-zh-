@@ -1,0 +1,28 @@
+# Phase 6C MOS synthesis - Vietnamese incumbent (D69).
+#
+# TTS-only: synthesises the 40 frozen MOS texts (D70) through
+# run_tts_benchmark. VAD/ASR/MT are the dummies the TTS benchmark never calls.
+# Run in .venv-tts-piper. No quality claim is made by synthesis itself.
+experiment:
+  name: mos_vi_piper
+  notes: >-
+    Phase 6C MOS synthesis, Vietnamese target, incumbent piper-vi-vais1000.
+    Input is the frozen MOS manifest text; output feeds stimulus preparation.
+
+languages:
+  src: en
+  tgt: vi
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: piper
+  params:
+    voice: vi_VN-vais1000-medium

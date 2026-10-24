@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đánh giá giọng nói</title>
+<style>
+  body { font: 18px/1.5 "Helvetica Neue", Arial, sans-serif; margin: 0;
+         background: #fafafa; color: #222; }
+  main { max-width: 40rem; margin: 0 auto; padding: 2rem 1rem; }
+  .pilot { background: #b00020; color: #fff; padding: .5rem 1rem; font-weight: 600; }
+  button { font: inherit; padding: .6rem 1.2rem; margin: .3rem; border-radius: .4rem;
+           border: 1px solid #888; background: #fff; cursor: pointer; }
+  button:disabled { opacity: .4; cursor: default; }
+  .rate { display: block; width: 100%; text-align: left; }
+  .progress { color: #666; font-size: .9rem; }
+  textarea { width: 100%; height: 8rem; font: 12px monospace; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div id="pilot" class="pilot" hidden>PILOT</div>
+<main id="app"></main>
+<script id="session" type="application/json">__SESSION__</script>
+<script>
+"use strict";
+const S = JSON.parse(document.getElementById("session").textContent);
+const T = S.text;
+const KEY = "mos-" + S.session_id;
+const app = document.getElementById("app");
+document.getElementById("pilot").hidden = !S.pilot;
+
+function load() {
+  try { const s = localStorage.getItem(KEY); if (s) return JSON.parse(s); } catch (e) {}
+  return null;
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(R)); } catch (e) {} }
+
+let R = load() || {
+  session_id: S.session_id, rater: S.rater, pilot: S.pilot,
+  user_agent: navigator.userAgent, started_at: new Date().toISOString(),
+  finished_at: null, stereo: [], stereo_ok: false,
+  headphone: [], headphone_passed: null, ratings: [],
+};
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  Object.assign(e, attrs || {});
+  for (const k of kids) e.append(k);
+  return e;
+}
+
+function show(...nodes) { app.replaceChildren(...nodes); }
+
+function intro() {
+  show(el("p", {textContent: T.instructions}),
+       el("p", {textContent: T.headphone_instructions}),
+       el("button", {textContent: T.play, onclick: next}));
+}
+
+// Stereo check (D76): unscored setup aid. Retry until the first ear is named.
+function stereoTrial(k, autoplay) {
+  const t = S.stereo[k % S.stereo.length];
+  const audio = new Audio(t.src);
+  const answer = side => {
+    R.stereo.push({left_first: t.left_first, answer: side});
+    const ok = side !== "unsure" && (side === "left") === t.left_first;
+    if (ok) { R.stereo_ok = true; save(); return next(); }
+    save();
+    show(el("p", {textContent: T.stereo_fix}),
+         el("button", {textContent: T.play, onclick: () => stereoTrial(k + 1, true)}));
+  };
+  const choices = [["left", T.stereo_left_first], ["right", T.stereo_right_first],
+                   ["unsure", T.stereo_unsure]].map(([side, label]) => el("button", {
+    className: "rate", textContent: label, disabled: true, onclick: () => answer(side),
+  }));
+  const play = el("button", {textContent: T.play, onclick: () => {
+    play.disabled = true; audio.play();
+  }});
+  audio.addEventListener("ended", () => choices.forEach(b => b.disabled = false));
+  show(el("p", {textContent: T.stereo_instructions}), play, el("div", {}, ...choices));
+  if (autoplay) play.click();  // the retry button already said "play"
+}
+
+function hpTrial(i) {
+  const t = S.headphone[i];
+  const audio = new Audio(t.src);
+  const choices = [0, 1, 2].map(k => el("button", {
+    textContent: String(k + 1), disabled: true,
+    onclick: () => { R.headphone.push({trial: t.trial, choice: k}); save(); next(); },
+  }));
+  const play = el("button", {textContent: T.play, onclick: () => {
+    play.disabled = true; audio.play();
+  }});
+  audio.addEventListener("ended", () => choices.forEach(b => b.disabled = false));
+  show(el("p", {className: "progress", textContent: (i + 1) + " / " + S.headphone.length}),
+       el("p", {textContent: T.choose_interval}), play, el("div", {}, ...choices));
+}
+
+function rateTrial(i) {
+  const t = S.trials[i];
+  const audio = new Audio(t.src);
+  let firstStart = null, replays = 0;
+  const buttons = ["5", "4", "3", "2", "1"].map(v => el("button", {
+    className: "rate", textContent: v + " – " + T.scale[v], disabled: true,
+    onclick: () => {
+      R.ratings.push({index: i, clip_id: t.clip_id, rating: Number(v), replays,
+                      trial_ms: performance.now() - firstStart});
+      save(); next();
+    },
+  }));
+  const play = el("button", {textContent: T.play, onclick: () => {
+    play.disabled = true; audio.play();
+  }});
+  const replay = el("button", {textContent: T.replay, disabled: true, onclick: () => {
+    replays += 1; replay.disabled = true; audio.currentTime = 0; audio.play();
+  }});
+  audio.addEventListener("playing", () => { if (firstStart === null) firstStart = performance.now(); });
+  audio.addEventListener("ended", () => {
+    buttons.forEach(b => b.disabled = false);
+    replay.disabled = replays >= S.max_replays;
+  });
+  show(el("p", {className: "progress", textContent: T.progress + " " + (i + 1) + " / " + S.trials.length}),
+       el("p", {textContent: T.question}), play, replay, el("div", {}, ...buttons));
+}
+
+function finish(message) {
+  R.finished_at = R.finished_at || new Date().toISOString();
+  save();
+  const json = JSON.stringify(R, null, 1);
+  const download = el("button", {textContent: T.download, onclick: () => {
+    const a = el("a", {href: URL.createObjectURL(new Blob([json], {type: "application/json"})),
+                       download: "mos_results_rater" + S.rater + ".json"});
+    document.body.append(a); a.click(); a.remove();
+  }});
+  show(el("p", {textContent: message}), download, el("textarea", {readOnly: true, value: json}));
+}
+
+function next() {
+  if (!R.started) { R.started = true; save(); }
+  if (!R.stereo_ok) return stereoTrial(R.stereo.length);
+  if (R.headphone.length < S.headphone.length) return hpTrial(R.headphone.length);
+  if (R.headphone_passed === null) {
+    const correct = R.headphone.filter(
+      (h, k) => h.choice === S.headphone[k].target).length;
+    R.headphone_passed = correct >= S.hp_pass;
+    save();
+  }
+  if (!R.headphone_passed) return finish(T.failed_screen);
+  if (R.ratings.length < S.trials.length) return rateTrial(R.ratings.length);
+  return finish(T.finished);
+}
+
+if (R.started) next(); else intro();
+</script>
+</body>
+</html>

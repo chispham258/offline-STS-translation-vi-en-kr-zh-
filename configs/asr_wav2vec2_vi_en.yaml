@@ -1,0 +1,35 @@
+# ASR vi->en track candidate: wav2vec2 CTC (Gate D carrier).
+#
+# Differs from the incumbent config in the ASR line only. VAD/MT/TTS held
+# constant so the comparison isolates the ASR component.
+experiment:
+  name: asr_track_wav2vec2
+  classification: selection
+  notes: >-
+    ASR vi->en track candidate. CTC emits no punctuation or casing, so raw WER
+    penalises formatting it structurally cannot produce; wer_normalized is the
+    pre-registered primary. Component comparison only - NOT final system
+    selection, and says nothing about reverse directions.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: silero
+
+asr:
+  model: wav2vec2
+  params:
+    model_name: nguyenvulebinh/wav2vec2-base-vietnamese-250h
+    device: cpu
+
+mt:
+  model: opus
+  params:
+    model_name: Helsinki-NLP/opus-mt-vi-en
+
+tts:
+  model: piper
+  params:
+    voice: vi_VN-vais1000-medium

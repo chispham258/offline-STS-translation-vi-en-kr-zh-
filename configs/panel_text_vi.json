@@ -1,0 +1,27 @@
+{
+  "approved": false,
+  "approved_by": null,
+  "drafted_by": "Claude (machine draft, 2026-09-26; stereo strings D76; wired-headphone and tone wording D77, 2026-09-28) - must be reviewed and approved by a native Vietnamese speaker before any real panel",
+  "question": "Giọng nói trong đoạn ghi âm này tự nhiên đến mức nào (so với giọng máy móc)?",
+  "scale": {
+    "5": "Rất tốt",
+    "4": "Tốt",
+    "3": "Khá",
+    "2": "Kém",
+    "1": "Rất kém"
+  },
+  "instructions": "Bạn sẽ lần lượt nghe 20 đoạn ghi âm ngắn và chấm điểm mức độ tự nhiên của giọng nói (khoảng 6–8 phút). Bắt buộc dùng tai nghe CÓ DÂY, đeo cả hai bên, và làm bài ở nơi yên tĩnh. Nếu máy tính đang dùng micro của tai nghe, hãy chuyển micro sang micro của máy tính. Mỗi đoạn có thể nghe lại tối đa hai lần. Không có câu trả lời đúng hay sai.",
+  "headphone_instructions": "Tiếp theo là bài kiểm tra tai nghe. Mỗi lượt có ba đoạn, cả ba đều là cùng một tiếng rè. Trong MỘT đoạn, bạn sẽ nghe thấy một nốt nhạc trầm, nhỏ lẫn bên trong tiếng rè. Hãy chọn đoạn có nốt nhạc đó.",
+  "play": "Phát",
+  "replay": "Nghe lại",
+  "choose_interval": "Đoạn nào có nốt nhạc trầm lẫn trong tiếng rè?",
+  "failed_screen": "Cảm ơn bạn đã tham gia. Phiên đánh giá kết thúc tại đây. Vui lòng tải kết quả và gửi lại cho chúng tôi.",
+  "finished": "Hoàn thành! Vui lòng tải kết quả và gửi lại cho chúng tôi.",
+  "download": "Tải kết quả",
+  "progress": "Đoạn",
+  "stereo_instructions": "Kiểm tra tai nghe: bạn sẽ nghe một tiếng bíp ở một bên tai, rồi một tiếng bíp ở bên tai còn lại. Tiếng bíp đầu tiên phát ra ở tai nào?",
+  "stereo_left_first": "Tai trái trước",
+  "stereo_right_first": "Tai phải trước",
+  "stereo_unsure": "Nghe ở cả hai tai / Không chắc",
+  "stereo_fix": "Âm thanh chưa đến đúng từng bên tai. Hãy kiểm tra: đeo cả hai bên tai nghe (không dùng loa máy tính); tắt chế độ âm thanh đơn âm (mono) trong cài đặt; nếu dùng tai nghe Bluetooth, hãy tắt micro. Sau đó bấm Phát để thử lại."
+}

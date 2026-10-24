@@ -1,0 +1,20 @@
+# The Phase 3 dummy pipeline. Every component here is a test double; no model
+# weights are involved.
+experiment:
+  name: dummy_vi_en
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: silence

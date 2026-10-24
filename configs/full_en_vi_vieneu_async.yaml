@@ -1,0 +1,41 @@
+# Async pipeline config with CT2 INT8 ASR + INT8 TTS
+# Queue sizes per stage for optimal backpressure
+
+experiment:
+  name: full_en_vi_vieneu_async
+  classification: development
+  notes: Async pipeline with CT2 INT8 ASR + INT8 TTS
+
+languages:
+  src: en
+  tgt: vi
+
+pipeline:
+  enabled: true
+  queue_sizes:
+    vad_asr: 128
+    asr_mt: 64
+    mt_tts: 64
+
+vad:
+  model: silero
+
+asr:
+  model: faster_whisper
+  params:
+    model_name: models/whisper-large-v3-turbo-ct2-int8
+    device: cpu
+    compute_type: int8
+    beam_size: 1
+    num_workers: 4
+
+mt:
+  model: envit5
+  params:
+    model_name: VietAI/envit5-translation
+
+tts:
+  model: vieneu
+  params:
+    voice: Mai Anh
+    precision: int8

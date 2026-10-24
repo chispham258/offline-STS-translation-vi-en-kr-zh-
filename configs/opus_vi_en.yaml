@@ -1,0 +1,23 @@
+# Opus-MT vi->en, the benchmark default MT direction. ASR and TTS are still
+# dummies, so the MT stage can be measured in isolation (mirrors
+# configs/whisper_vi_en.yaml, which isolated ASR the same way in Task 2).
+experiment:
+  name: opus_vi_en
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: opus
+  params:
+    model_name: Helsinki-NLP/opus-mt-vi-en
+
+tts:
+  model: silence

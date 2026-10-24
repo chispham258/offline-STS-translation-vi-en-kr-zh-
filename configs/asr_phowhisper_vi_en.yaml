@@ -1,0 +1,39 @@
+# ASR vi->en track candidate: PhoWhisper-large.
+#
+# Vietnamese-specialised fine-tune of Whisper-large. Registered as
+# family="whisper" and therefore does NOT satisfy Gate D (D56) - it is in the
+# matrix on merit, not for diversity.
+#
+# Differs from the incumbent config in the ASR line only.
+experiment:
+  name: asr_track_phowhisper
+  classification: selection
+  notes: >-
+    ASR vi->en track candidate. Verified by config inspection: 32/32 layers,
+    80-mel 16 kHz 30 s feature extractor - same input shape as our corpus, so no
+    corpus adaptation. Vietnamese-only, so it cannot serve zh/ko source
+    directions; irrelevant to this track, recorded for Track B. Component
+    comparison only - NOT final system selection.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: silero
+
+asr:
+  model: whisper
+  params:
+    model_name: vinai/PhoWhisper-large
+    device: cpu
+
+mt:
+  model: opus
+  params:
+    model_name: Helsinki-NLP/opus-mt-vi-en
+
+tts:
+  model: piper
+  params:
+    voice: vi_VN-vais1000-medium

@@ -1,0 +1,41 @@
+# Phase 5.0 arm: openai/whisper-base (72.6M).
+#
+# The ONLY line that differs between the four arms is asr.params.model_name.
+# VAD, MT and TTS are held constant so the comparison isolates the checkpoint.
+#
+# Pre-registered. Selection rule fixed before execution - see
+# docs/superpowers/specs/2026-08-06-phase-5-0-whisper-checkpoint-selection.md
+experiment:
+  name: phase5_whisper_base
+  classification: selection
+  notes: >-
+    Phase 5.0 checkpoint-selection arm, openai/whisper-base. Primary endpoint is
+    wer_normalized against the whisper-small incumbent; end-to-end BLEU is
+    confirmatory. Latency is reported but is NOT a selection gate, because
+    end_to_speech_ms is an offline proxy stamped after file consumption.
+    Corpus is FLEURS vi->en n=200 seed 0, boundary_source file_extent, so no
+    VAD accuracy is claimed. Not comparable to Phase 4 figures: the n=200
+    draw is not nested in the n=50 draw.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: silero
+
+asr:
+  model: whisper
+  params:
+    model_name: openai/whisper-base
+    device: cpu
+
+mt:
+  model: opus
+  params:
+    model_name: Helsinki-NLP/opus-mt-vi-en
+
+tts:
+  model: piper
+  params:
+    voice: vi_VN-vais1000-medium

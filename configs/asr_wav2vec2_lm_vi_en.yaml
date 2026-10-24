@@ -1,0 +1,59 @@
+# vi -> en ASR arm: wav2vec2 CTC + Vietnamese 4-gram LM, envit5 MT.
+#
+# The LM path is a local asset under models/ (gitignored). This config is for
+# the 22-utterance G1 pipeline gate; full 200 only after G1 passes.
+
+experiment:
+  name: asr_wav2vec2_lm_vi_en
+  classification: smoke
+  notes: >-
+    vi->en wav2vec2-base-vietnamese-250h with its 4-gram KenLM, envit5 MT,
+    Piper English. G1 screen: 22 utterances, same VAD/Piper as the ASR screen.
+    LM is 1.36 GB and CC-BY-NC-4.0; non-commercial MVP only.
+
+languages:
+  src: vi
+  tgt: en
+
+pipeline:
+  enabled: true
+  queue_sizes:
+    vad_asr: 128
+    asr_mt: 64
+    mt_tts: 64
+
+vad:
+  model: silero
+  params:
+    threshold: 0.5
+    min_silence_duration_ms: 700
+    speech_pad_ms: 30
+
+asr:
+  model: wav2vec2
+  params:
+    model_name: nguyenvulebinh/wav2vec2-base-vietnamese-250h
+    lm_path: models/wav2vec2-vi-lm/vi_lm_4grams.bin
+    beam_width: 100
+    alpha: 0.5
+    beta: 1.5
+
+mt:
+  model: envit5
+  params:
+    model_name: VietAI/envit5-translation
+
+tts:
+  model: language_router
+  params:
+    backends:
+      vi:
+        module: onevoice.components.piper_tts
+        model: piper
+        params:
+          voice: vi_VN-vais1000-medium
+      en:
+        module: onevoice.components.piper_tts
+        model: piper
+        params:
+          voice: en_US-lessac-medium

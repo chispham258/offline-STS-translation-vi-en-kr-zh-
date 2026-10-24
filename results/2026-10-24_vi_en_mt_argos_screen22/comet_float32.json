@@ -1,0 +1,9 @@
+{
+  "metric": "comet",
+  "model": "Unbabel/wmt22-comet-da",
+  "refs": "corpora/fleurs_vi_en_200/refs_screen22.jsonl",
+  "run": "runs/bakeoff_vi_en/mt_argos_screen22/argos_vi_en_float32_screen22.jsonl",
+  "utterances_excluded": 0,
+  "utterances_scored": 22,
+  "value": 0.6877836056730964
+}

@@ -1,0 +1,73 @@
+{
+  "components": {
+    "asr": {
+      "commit_hash": "unknown",
+      "component": "faster_whisper",
+      "implementation": "onevoice.components.faster_whisper_asr.FasterWhisperASR",
+      "invocation": {
+        "src_lang": "vi",
+        "task": "transcribe"
+      },
+      "model_id": "models/phowhisper-large-ct2-int8",
+      "params_hash": "38bff5746c56ab094172d30b5c751bdbf8fdeadc0e73c6b7f75031df7c7943c7",
+      "revision": "default",
+      "tokenizer_revision": "same-repo-as-model"
+    },
+    "mt": {
+      "commit_hash": "840bc88104d5a4277af740eaedb024df8c3093e7",
+      "component": "envit5",
+      "implementation": "onevoice.components.t5_mt.EnViT5MT",
+      "invocation": {
+        "prefix": "vi: ",
+        "route": "direct",
+        "src_lang": "vi",
+        "tgt_lang": "en"
+      },
+      "model_id": "VietAI/envit5-translation",
+      "params_hash": "c81c6f4ac5c9cbdaf648e214f339b7d792f1daa4987b1e3cdae0cdf182b0f0fd",
+      "revision": "default",
+      "tokenizer_revision": "same-repo-as-model"
+    },
+    "tts": {
+      "backend_key": "en",
+      "backend_model": "piper",
+      "component": "piper",
+      "implementation": "onevoice.components.piper_tts.PiperTTS",
+      "invocation": {
+        "sample_rate": 22050,
+        "tgt_lang": "en",
+        "voice": "en_US-lessac-medium"
+      },
+      "language": "en",
+      "model_id": "rhasspy/piper-voices",
+      "params_hash": "a0e335ae759b56f2327a7d3d7172c6de15d35b9fd0cb142d2141cc54d4bb3bb6",
+      "revision": "default",
+      "router": "language_router",
+      "weight_bytes": 63201294,
+      "weight_hash": "5efe09e69902187827af646e1a6e9d269dee769f9877d17b16b1b46eeaaf019f"
+    }
+  },
+  "config": "runs/bakeoff_vi_en/asr_phowhisper_large_full200_pipeline/config.used.yaml",
+  "config_hash": "f8cfdfdceb90b774b8d92e01e13c781912c941fbc098b35b16139bf6f2973e1e",
+  "config_path": "runs/bakeoff_vi_en/asr_phowhisper_large_full200_pipeline/config.used.yaml",
+  "config_snapshot": "config.snapshot.yaml",
+  "duration_seconds": 2780.958,
+  "experiment": "asr_phowhisper_large_full200_pipeline",
+  "finished_at": "2026-10-23T16:53:03.572990+00:00",
+  "framework_commit": "c0be34228a5a4f49a92ee994593eee38d22f51ea",
+  "framework_dirty": true,
+  "host": {
+    "arch": "arm64",
+    "cpu": "arm",
+    "os": "Darwin",
+    "python": "3.11.14"
+  },
+  "refs": "corpora/fleurs_vi_en_200/refs.jsonl",
+  "refs_hash": "7eb65bafa0634292ed117209ca380e0a8d567c456710cba1d3917cac72971aa0",
+  "refs_path": "corpora/fleurs_vi_en_200/refs.jsonl",
+  "started_at": "2026-10-23T16:06:42.615400+00:00",
+  "status": "complete",
+  "utterances_fresh": 200,
+  "utterances_resumed": 0,
+  "utterances_total": 200
+}

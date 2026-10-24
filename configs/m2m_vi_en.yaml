@@ -1,0 +1,23 @@
+# m2m100 vi->en, Branch B's many-to-many candidate. ASR and TTS are still
+# dummies, so the MT stage can be measured in isolation (mirrors
+# configs/opus_vi_en.yaml, which isolated Opus-MT the same way in Task 3).
+experiment:
+  name: m2m_vi_en
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: m2m100
+  params:
+    model_name: facebook/m2m100_418M
+
+tts:
+  model: silence

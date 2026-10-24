@@ -1,0 +1,3 @@
+{"utt_id": "utt-001", "hyp_text": "Hello, how are you?", "status": "ok", "error": "", "asr_text": "Xin chào, anh khỏe không?", "hyp_audio_path": "out/utt-001.wav", "audio_duration_s": 2.0, "timing": {"speech_end": 1.80, "tts_first_audio": 2.75, "tts_done": 3.40}}
+{"utt_id": "utt-002", "hyp_text": "The conveyor is broken.", "status": "ok", "error": "", "asr_text": "Cái băng chuyền bị hỏng rồi.", "hyp_audio_path": "out/utt-002.wav", "audio_duration_s": 2.6, "timing": {"speech_end": 2.40, "tts_first_audio": 3.60, "tts_done": 4.50}}
+{"utt_id": "utt-003", "hyp_text": "", "status": "error", "error": "RuntimeError: TTS backend returned no audio", "asr_text": "Anh có thấy đồ bảo hộ của tôi không?", "hyp_audio_path": "", "audio_duration_s": 3.1, "timing": {"speech_end": 2.90}}

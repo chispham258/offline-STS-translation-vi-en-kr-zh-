@@ -1,0 +1,29 @@
+# Phase 6C MOS synthesis - Vietnamese challenger mms-tts-vie (D69).
+#
+# TTS-only: synthesises the 40 frozen MOS texts (D70) through
+# run_tts_benchmark. VAD/ASR/MT are the dummies the TTS benchmark never calls.
+# Run in the main environment (transformers). No quality claim is made by
+# synthesis itself.
+experiment:
+  name: mos_vi_mms
+  notes: >-
+    Phase 6C MOS synthesis, Vietnamese target, challenger mms-tts-vie.
+    Input is the frozen MOS manifest text; output feeds stimulus preparation.
+
+languages:
+  src: en
+  tgt: vi
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: mms
+  params:
+    model_name: facebook/mms-tts-vie

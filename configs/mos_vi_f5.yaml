@@ -1,0 +1,32 @@
+# Phase 6C MOS synthesis - Vietnamese challenger f5 (D69).
+#
+# TTS-only: synthesises the 40 frozen MOS texts (D70) through
+# run_tts_benchmark. VAD/ASR/MT are the dummies the TTS benchmark never calls.
+# Run in .venv-tts-f5. Speaker reference and its transcript are the frozen
+# section 12 values; neither may be changed per utterance.
+experiment:
+  name: mos_vi_f5
+  notes: >-
+    Phase 6C MOS synthesis, Vietnamese target, challenger f5 with the frozen
+    section 12 reference (FLEURS 1664). Input is the frozen MOS manifest text;
+    output feeds stimulus preparation.
+
+languages:
+  src: en
+  tgt: vi
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: f5
+  params:
+    model_name: hynt/F5-TTS-Vietnamese-ViVoice
+    reference_audio: corpora/fleurs_vi_en_200/audio/1664.wav
+    reference_text: vặn hai cục bột khô với nhau rồi bóp chúng thành một viên cầu bằng tay ướt sạch

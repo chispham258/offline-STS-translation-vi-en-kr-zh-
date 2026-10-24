@@ -1,0 +1,27 @@
+# Rollback target for the Silero VAD integration (D26).
+#
+# If Silero fails its gate or proves unstable, this is the documented revert:
+# EnergyVAD is the detector every Phase 4 measurement so far was taken with, so
+# rolling back to it restores a known-good baseline rather than an untested one.
+# Exercised automatically by tests/test_rollback.py's glob.
+experiment:
+  name: rollback_silero_only
+  notes: >-
+    All-dummy rollback target for the Silero integration. Produces no meaningful
+    quality or latency figures by design.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: silence

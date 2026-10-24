@@ -1,0 +1,41 @@
+# Reference Whisper configuration — the benchmark default (D27).
+#
+# whisper-small is what every reported ASR number is measured against, so
+# comparisons stay like-for-like. Phase 5 selects the production size.
+#
+# For a fast development loop use configs/whisper_tiny_dev.yaml instead, and do
+# not report its numbers as benchmark results.
+#
+# MT and TTS are still dummies here, so the ASR stage can be benchmarked in
+# isolation before MT is integrated (Task 3).
+# Checkpoint set by the recorded outcome of Phase 5.0 (D51), not by preference:
+# turbo is superior to small on wer_normalized (-0.134, 98.33% CI
+# [-0.151, -0.118]) and the gain propagates (+4.67 BLEU). See
+# docs/RESULTS.md section 2 for the archived checkpoint screen.
+#
+# This is the QUALITY REFERENCE checkpoint, not a validated deployment model.
+# Measured: rtf 0.934 on one Apple M1, CPU, unquantised, unoptimised. NOT
+# measured: Snapdragon-class hardware, or any quantised/accelerated form.
+# On-device feasibility is Phase 6's question to answer, not an assumption
+# either way.
+experiment:
+  name: whisper_vi_en
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: whisper
+  params:
+    model_name: openai/whisper-large-v3-turbo
+    device: cpu
+
+mt:
+  model: identity
+
+tts:
+  model: silence

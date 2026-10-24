@@ -1,0 +1,32 @@
+# Async pipeline with Silence TTS (Option 2 - ASR+MT only)
+experiment:
+  name: full_200_async_silence
+  classification: development
+languages:
+  src: en
+  tgt: vi
+pipeline:
+  enabled: true
+  queue_sizes:
+    vad_asr: 128
+    asr_mt: 64
+    mt_tts: 64
+vad:
+  model: silero
+asr:
+  model: faster_whisper
+  params:
+    model_name: models/whisper-large-v3-turbo-ct2-int8
+    device: cpu
+    compute_type: int8
+    beam_size: 1
+    num_workers: 4
+mt:
+  model: envit5
+  params:
+    model_name: VietAI/envit5-translation
+tts:
+  model: silence
+  params:
+    sample_rate: 16000
+    ms_per_char: 60

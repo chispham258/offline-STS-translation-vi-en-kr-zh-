@@ -1,0 +1,51 @@
+# Proposed Round 2 configuration, end-to-end, vi->en. TTS condition B.
+#
+# INTEGRATION MEASUREMENT, NOT A SELECTION. Identical to
+# full_proposed_vi_en_ttsvi.yaml in every stage except the Piper voice, so the
+# pair isolates the effect of speaking English output with an English voice
+# rather than a Vietnamese one.
+#
+# en_US-lessac-medium is content-verified by the authorised TTS smoke test
+# (output_tested) but is NOT a registered TTS candidate: registration is
+# proposed and awaiting approval. Using it here is a development-run component
+# choice, not a registration, not a candidate entry and not a selection. This
+# run makes no naturalness claim about either voice - no metric in this
+# framework scores naturalness, and none is invented.
+experiment:
+  name: full_proposed_vi_en_ttsen
+  classification: development
+  notes: >-
+    End-to-end integration characterisation of the proposed stack: Silero VAD,
+    whisper-large-v3-turbo, envit5-translation, Piper. TTS condition B uses the
+    English voice en_US-lessac-medium, which matches the language of the MT
+    output. Paired with condition A, which differs in the voice alone, to
+    quantify how the voice-language mismatch affects TTS and total pipeline
+    timing. Neither condition is a TTS winner: no quality metric is computed,
+    no delta is derived, no candidate is compared and the TTS registry is
+    unchanged. Corpus is FLEURS vi->en n=200 seed 0, boundary_source
+    file_extent, so no VAD accuracy is claimed. Latency and RTF are
+    host-machine observations on unquantised, unoptimised CPU and are not
+    device predictions.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: silero
+
+asr:
+  model: whisper
+  params:
+    model_name: openai/whisper-large-v3-turbo
+    device: cpu
+
+mt:
+  model: envit5
+  params:
+    model_name: VietAI/envit5-translation
+
+tts:
+  model: piper
+  params:
+    voice: en_US-lessac-medium

@@ -1,0 +1,42 @@
+experiment:
+  name: asr_wav2vec2_lm_vi_en
+  classification: development
+  notes: PhoWhisper-large CT2 INT8 + envit5 + Piper; owner-approved quality-only full
+    200; same VAD/MT/TTS as wav2vec2+LM baseline.
+languages:
+  src: vi
+  tgt: en
+vad:
+  model: silero
+  params:
+    threshold: 0.5
+    min_silence_duration_ms: 700
+    speech_pad_ms: 30
+asr:
+  model: faster_whisper
+  params:
+    model_name: models/phowhisper-large-ct2-int8
+mt:
+  model: envit5
+  params:
+    model_name: VietAI/envit5-translation
+tts:
+  model: language_router
+  params:
+    backends:
+      vi:
+        module: onevoice.components.piper_tts
+        model: piper
+        params:
+          voice: vi_VN-vais1000-medium
+      en:
+        module: onevoice.components.piper_tts
+        model: piper
+        params:
+          voice: en_US-lessac-medium
+pipeline:
+  enabled: true
+  queue_sizes:
+    vad_asr: 128
+    asr_mt: 64
+    mt_tts: 64

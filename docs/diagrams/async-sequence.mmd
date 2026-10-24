@@ -1,0 +1,24 @@
+%% Async driver: one utterance, showing that ASR/MT still batch at flush.
+%% Source of truth for docs/diagrams/async-sequence.svg.
+%% Render: scripts/render_diagrams.sh
+sequenceDiagram
+    autonumber
+    participant M as Main coroutine
+    participant V as VAD (sync)
+    participant A as ASR worker
+    participant T as MT worker
+    participant S as TTS worker
+
+    M->>V: push(32 ms frame)
+    V-->>M: speech_start / speech_end
+    M->>A: speech frames (vad_asr q=128)
+    Note over M,A: silence dropped, segments concatenated
+    M->>A: FLUSH_MARKER
+    A->>A: flush(): decode whole utterance
+    A->>T: AsrEvent + FLUSH_MARKER (asr_mt q=64)
+    T->>T: flush(): translate
+    T->>S: MtEvent + FLUSH_MARKER (mt_tts q=64)
+    S->>S: push(): synthesize
+    S->>S: flush()
+    S-->>M: audio chunks + FLUSH_MARKER
+    Note over A,T: current code: no segment-level overlap

@@ -1,0 +1,28 @@
+{
+  "benchmark": "mt_component",
+  "components": {
+    "mt": {
+      "commit_hash": "840bc88104d5a4277af740eaedb024df8c3093e7",
+      "component": "envit5",
+      "implementation": "onevoice.components.t5_mt.EnViT5MT",
+      "invocation": {
+        "prefix": "vi: ",
+        "route": "direct",
+        "src_lang": "vi",
+        "tgt_lang": "en"
+      },
+      "model_id": "VietAI/envit5-translation",
+      "params_hash": "c81c6f4ac5c9cbdaf648e214f339b7d792f1daa4987b1e3cdae0cdf182b0f0fd",
+      "revision": "default",
+      "tokenizer_revision": "same-repo-as-model"
+    }
+  },
+  "config_hash": "7394c2c5670a3730be5169e6dd7db97920de477b96cd9b68524239a9e2ea9483",
+  "config_path": "configs/mt_envit5_vi_en.yaml",
+  "config_snapshot": "config.snapshot.yaml",
+  "experiment": "mt-envit5-gold200",
+  "framework_commit": "c0be34228a5a4f49a92ee994593eee38d22f51ea",
+  "framework_dirty": true,
+  "refs_hash": "7eb65bafa0634292ed117209ca380e0a8d567c456710cba1d3917cac72971aa0",
+  "refs_path": "corpora/fleurs_vi_en_200/refs.jsonl"
+}

@@ -1,0 +1,123 @@
+{
+  "benchmark": "mt_component",
+  "classification": "screen_development",
+  "experiment": "mt-argos-vi-en-screen22",
+  "status": "complete",
+  "probed_at": "2026-10-24",
+  "probe_script": "runs/bakeoff_vi_en/mt_argos_screen22/probe.py",
+  "report": "runs/bakeoff_vi_en/mt_argos_screen22/report.md",
+  "source_kind": "asr_text",
+  "source": {
+    "path": "runs/bakeoff_vi_en/asr_wav2vec2_lm_screen22/run.jsonl",
+    "sha256": "5fea259d07f74e948cc203082d4f8afe75861d3e7b02d62872cf276c8c896f6b",
+    "bytes": 24036,
+    "baseline_report": "runs/bakeoff_vi_en/asr_wav2vec2_lm_screen22/report.md"
+  },
+  "refs": {
+    "path": "corpora/fleurs_vi_en_200/refs_screen22.jsonl",
+    "sha256": "59158be7f9c08badc080db727f6b05c2bae0cca8f2280c139b1dab2ea274ad58",
+    "bytes": 9517
+  },
+  "utterances": 22,
+  "components": {
+    "mt": {
+      "component": "argos_ct2",
+      "implementation": "direct CTranslate2 model from the official Argos package; no argostranslate wrapper and no Argos sentence-boundary detection",
+      "model_id": "argosopentech/argos-translate:translate-vi_en:1.9",
+      "package_url": "https://argos-net.com/v1/translate-vi_en-1_9.argosmodel",
+      "package_sha256": "ebd51b7189b13eccb9238a5777de1d343008c4c05284a8b89610242364433953",
+      "package_bytes": 65895840,
+      "uncompressed_bytes": 79738259,
+      "model_bin_bytes": 76857078,
+      "model_bin_sha256": "63aa5bdb275126e62d27ca43ed8c9021df0ae6b94383ca8be4d99c6d73fbcb96",
+      "sentencepiece_sha256": "9deb4f9e7bebd3876f4bf238a9eb52f2f95a1fba2210a4a8239167c55c15e67d",
+      "license": {
+        "code": "MIT",
+        "model": "CC-BY-4.0",
+        "note": "Package README: original OPUS-MT model is CC-BY 4.0; attribution required."
+      },
+      "invocation": {
+        "device": "cpu",
+        "compute_types_tested": ["int8", "float32"],
+        "beam_size": 4,
+        "num_hypotheses": 1,
+        "length_penalty": 0.2,
+        "replace_unknowns": true,
+        "max_batch_size": 32,
+        "batch_type": "tokens",
+        "inter_threads": 1,
+        "intra_threads": 4,
+        "warmup_calls": 3,
+        "sentence_boundary_detection": "none; each screen row is one sentence"
+      }
+    }
+  },
+  "variants": {
+    "int8_asr_source": {
+      "output": "argos_vi_en_int8_screen22.jsonl",
+      "output_sha256": "822d1d0a9cf3d627c493ce67bec36c1d938e80692253da78b6d2c4b4bfcf7d23",
+      "scores": {
+        "bleu": 14.60,
+        "chrf": 45.01,
+        "comet": 0.6902589052915573,
+        "mt_wall_ms_mean": 355.9,
+        "mt_wall_ms_p50": 330.4
+      }
+    },
+    "float32_asr_source": {
+      "output": "argos_vi_en_float32_screen22.jsonl",
+      "output_sha256": "9775794cacf0c302eb58e848ae39e946f800f25082eec6273ce6686fc12a1232",
+      "scores": {
+        "bleu": 14.68,
+        "chrf": 44.47,
+        "comet": 0.6877836056730964,
+        "mt_wall_ms_mean": 817.0,
+        "mt_wall_ms_p50": 784.4
+      }
+    },
+    "int8_gold_source": {
+      "output": "argos_vi_en_gold22.jsonl",
+      "output_sha256": "9e81afb8e4366454adc2a8d5b453fb9a7aa87963d90e7207df2c85ded28a4e1e",
+      "scores": {
+        "bleu": 19.77,
+        "chrf": 52.55,
+        "comet": 0.7836885154247284,
+        "mt_wall_ms_mean": 338.9,
+        "mt_wall_ms_p50": 306.8
+      }
+    }
+  },
+  "baselines": {
+    "envit5_asr_source": {
+      "path": "runs/bakeoff_vi_en/asr_wav2vec2_lm_screen22/report.md",
+      "bleu": 14.55,
+      "chrf": 49.23,
+      "comet": 0.7781,
+      "mt_wall_ms_p50": 709.0
+    },
+    "envit5_gold_source": {
+      "path": "runs/bakeoff_vi_en/mt_envit5_gold22/report.md",
+      "bleu": 23.98,
+      "chrf": 58.11,
+      "mt_wall_ms_p50": 1280.283,
+      "note": "COMET not recorded in the archived gold22 report."
+    }
+  },
+  "host": {
+    "platform": "macOS-15.7.1-arm64-arm-64bit",
+    "arch": "arm64",
+    "python": "3.11.14",
+    "ctranslate2": "4.8.3",
+    "sentencepiece": "0.2.2"
+  },
+  "framework_commit": "c0be34228a5a4f49a92ee994593eee38d22f51ea",
+  "framework_dirty": true,
+  "notes": [
+    "Fixed-22 screen, not a selection ranking; no paired bootstrap CI.",
+    "COMET uses scripts/score_comet.py, which scores with the gold source text, matching the project's baseline reports.",
+    "Timings are MT-stage wall time only on Apple M1 CPU; not pipeline RTF and not a Snapdragon prediction.",
+    "The Argos package was run directly through CTranslate2, bypassing Argos sentence-boundary detection; all 22 rows are single sentences.",
+    "Decision: reject as primary MT for quality-first. Keep only as a latency/fallback candidate if the owner relaxes the quality gate.",
+    "No source or config change; no commit."
+  ]
+}

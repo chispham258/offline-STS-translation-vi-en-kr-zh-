@@ -1,0 +1,50 @@
+# Proposed Round 2 configuration, end-to-end, vi->en. TTS condition A.
+#
+# INTEGRATION MEASUREMENT, NOT A SELECTION. The component choices below were
+# each settled by their own track; this run does not re-decide any of them and
+# reads no closed result. It exists because the selected components have never
+# been executed together: the MT tracks were text-to-text with no audio, VAD or
+# TTS, and the Phase 5.0 end-to-end runs used opus-mt-vi-en, not envit5.
+#
+# Condition A holds the Vietnamese voice used by Phase 4 and Phase 5.0, so the
+# timing is continuous with those runs. The translation target is English, so
+# the synthesized audio is NOT linguistically meaningful and must not be used
+# for any quality judgement. Condition B (full_proposed_vi_en_ttsen.yaml)
+# differs in the voice alone.
+experiment:
+  name: full_proposed_vi_en_ttsvi
+  classification: development
+  notes: >-
+    End-to-end integration characterisation of the proposed stack: Silero VAD,
+    whisper-large-v3-turbo, envit5-translation, Piper. TTS condition A holds
+    the Vietnamese voice vi_VN-vais1000-medium for continuity with Phase 5.0,
+    while the MT output is English - so the synthesized audio is not
+    linguistically meaningful and carries no quality claim of any kind. No
+    delta is derived, no candidate is compared, no selection is made and no
+    closed result is touched. Corpus is FLEURS vi->en n=200 seed 0,
+    boundary_source file_extent, so no VAD accuracy is claimed. Latency and RTF
+    are host-machine observations on unquantised, unoptimised CPU and are not
+    device predictions.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: silero
+
+asr:
+  model: whisper
+  params:
+    model_name: openai/whisper-large-v3-turbo
+    device: cpu
+
+mt:
+  model: envit5
+  params:
+    model_name: VietAI/envit5-translation
+
+tts:
+  model: piper
+  params:
+    voice: vi_VN-vais1000-medium

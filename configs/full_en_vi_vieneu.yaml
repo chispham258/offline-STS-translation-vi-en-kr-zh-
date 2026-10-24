@@ -1,0 +1,46 @@
+# End-to-end en->vi configuration with VieNeu-TTS v3 Turbo (D79).
+#
+# Components: Silero VAD, Whisper Turbo ASR, envit5 MT (D68), VieNeu-TTS (D79).
+# Run in .venv-tts-vieneu for TTS; other stages use base env.
+# Corpus: FLEURS en->vi (reversed FLEURS vi->en, 200 utterances, seed 0).
+# Boundary source: file_extent (no VAD accuracy claimed).
+# Classification: development — integration characterisation, no selection.
+experiment:
+  name: full_en_vi_vieneu
+  classification: development
+  notes: >-
+    End-to-end integration characterisation of the en->vi stack: Silero VAD,
+    whisper-large-v3-turbo ASR, envit5-translation MT, VieNeu-TTS v3 Turbo.
+    The TTS voice is Vietnamese (matches MT output language), so synthesized
+    audio IS linguistically meaningful and suitable for quality judgement.
+    Corpus is FLEURS en->vi n=200 seed 0 (reversed vi->en), boundary_source
+    file_extent, so no VAD accuracy is claimed. Latency and RTF are
+    host-machine observations on unquantised, unoptimised CPU and are not
+    device predictions. VieNeu chosen by owner decision D79 without MOS;
+    no naturalness claim is made.
+
+languages:
+  src: en
+  tgt: vi
+
+vad:
+  model: silero
+
+asr:
+  model: whisper
+  params:
+    model_name: openai/whisper-large-v3-turbo
+    device: cpu
+    num_beams: 1
+    torch_dtype: float32
+
+mt:
+  model: envit5
+  params:
+    model_name: VietAI/envit5-translation
+
+tts:
+  model: vieneu
+  params:
+    voice: Mai Anh
+    precision: int8

@@ -1,0 +1,23 @@
+# D26: baseline rollback target. All components here are dummies, so this
+# config always runs — no model weights, no extras, no network. Every
+# integration task in Phase 4 must remain reachable from a failed real
+# component back to this config (or a mixed config it ships alongside it).
+# This is a copy of configs/dummy_vi_en.yaml; keep the two in sync.
+experiment:
+  name: rollback_all_dummy
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: silence

@@ -1,0 +1,9 @@
+{
+  "metric": "comet",
+  "model": "Unbabel/wmt22-comet-da",
+  "refs": "corpora/fleurs_vi_en_200/refs.jsonl",
+  "run": "runs/bakeoff_vi_en/mt_envit5_gold200/hypotheses.jsonl",
+  "utterances_excluded": 0,
+  "utterances_scored": 200,
+  "value": 0.8321911142766476
+}

@@ -1,0 +1,19 @@
+# MT candidate: envit5, vi->en. Pre-registered 2026-08-15; delta fixed before this ran.
+experiment:
+  name: mt_envit5_vi_en
+  classification: development
+  notes: >-
+    MT candidate run for vi->en, text-to-text, same corpus as the incumbent.
+languages:
+  src: vi
+  tgt: en
+vad:
+  model: energy
+asr:
+  model: echo
+mt:
+  model: envit5
+  params:
+    model_name: VietAI/envit5-translation
+tts:
+  model: silence

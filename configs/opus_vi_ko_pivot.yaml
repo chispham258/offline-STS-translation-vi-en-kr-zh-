@@ -1,0 +1,38 @@
+# D13: vi->ko has no direct Opus model, so it pivots through English —
+# opus-mt-vi-en then opus-mt-tc-big-en-ko — via PivotMT (D12), which composes
+# the two legs as a single BaseMT. The pipeline driver still sees one mt
+# component and never learns a hop happened.
+#
+# Each leg is fully self-describing (its own model_name/src_lang/tgt_lang),
+# so PivotMT does not need the outer languages block forwarded to either leg.
+experiment:
+  name: opus_vi_ko_pivot
+
+languages:
+  src: vi
+  tgt: ko
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: pivot
+  params:
+    first:
+      model: opus
+      params:
+        model_name: Helsinki-NLP/opus-mt-vi-en
+        src_lang: vi
+        tgt_lang: en
+    second:
+      model: opus
+      params:
+        model_name: Helsinki-NLP/opus-mt-tc-big-en-ko
+        src_lang: en
+        tgt_lang: ko
+
+tts:
+  model: silence

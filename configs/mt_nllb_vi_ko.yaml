@@ -1,0 +1,24 @@
+# MT incumbent baseline: NLLB vi->ko. Establishes the per-direction
+# statistical resolution from which delta is later derived (D60/D62).
+experiment:
+  name: mt_nllb_vi_ko
+  classification: development
+  notes: >-
+    MT incumbent reference run for vi->ko. Text-to-text only, no ASR/VAD/TTS,
+    so MT is isolated from ASR error. Used to measure the per-direction
+    resolution; NOT a candidate comparison and NOT a selection.
+
+languages:
+  src: vi
+  tgt: ko
+
+vad:
+  model: energy
+asr:
+  model: echo
+mt:
+  model: nllb
+  params:
+    model_name: facebook/nllb-200-distilled-600M
+tts:
+  model: silence

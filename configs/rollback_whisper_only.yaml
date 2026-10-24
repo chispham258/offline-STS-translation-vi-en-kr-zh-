@@ -1,0 +1,22 @@
+# D26: rollback target for the Whisper ASR integration (Task 2). If Whisper
+# fails its gate, this is the documented revert. All components here are
+# dummies, so this config always runs — no model weights, no extras, no
+# network. This is a copy of configs/rollback_all_dummy.yaml; keep in sync.
+experiment:
+  name: rollback_whisper_only
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: silence

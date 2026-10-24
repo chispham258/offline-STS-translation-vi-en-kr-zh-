@@ -1,0 +1,41 @@
+# Branch A with Silero replacing EnergyVAD (Task 11).
+#
+# Silero has real lookahead: it confirms an onset only after seeing what
+# follows, so speech_start arrives late with t_audio pointing backwards. That
+# only works because D42's lookback buffer replays the pre-onset frames; before
+# Task 10 this config would have truncated the first word of every utterance
+# while looking healthy.
+#
+# BASELINE ONLY. No tuning, no optimisation, no parameter search.
+experiment:
+  name: full_silero_vi_en
+  notes: >-
+    Branch A with Silero VAD. Differs from full_permissive_vi_en in the VAD
+    stage alone, so the comparison isolates detection. The TTS voice is
+    Vietnamese while the translation target is English, so synthesized audio is
+    not linguistically meaningful and must not be used for quality judgement.
+    Boundary source is file_extent, so no VAD accuracy is claimed - see
+    docs/BOUNDARY_METHODOLOGY.md.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: silero
+
+asr:
+  model: whisper
+  params:
+    model_name: openai/whisper-small
+    device: cpu
+
+mt:
+  model: opus
+  params:
+    model_name: Helsinki-NLP/opus-mt-vi-en
+
+tts:
+  model: piper
+  params:
+    voice: vi_VN-vais1000-medium

@@ -1,0 +1,23 @@
+.remember/
+.DS_Store
+__MACOSX/
+__pycache__/
+*.py[cod]
+.venv*/
+.pytest_cache/
+.ruff_cache/
+/outputs/
+/models/
+/runs/
+*.egg-info/
+.superpowers/
+.opencode/
+.claude/
+
+# Corpus audio is rebuildable from refs.meta.json (deterministic subset),
+# so the wavs are not tracked. The manifest and sidecar are.
+corpora/*/audio/
+
+# Keep the one real FLEURS clip a VAD test reads.
+!corpora/fleurs_vi_en/audio/
+!corpora/fleurs_vi_en/audio/1660.wav

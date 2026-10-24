@@ -1,0 +1,30 @@
+# MMS-TTS Vietnamese — the challenger to the Piper baseline (D23, D35).
+#
+# Benchmarked by the same instrument and protocol as Piper. The baseline
+# governs which component ships by default, never how the comparison runs: if
+# MMS wins on latency, footprint or Phase 5 MOS, that must be visible here.
+experiment:
+  name: mms_vi
+  notes: >-
+    Run against a vi->en fixture set, so the Vietnamese voice is reading English
+    text. Audio is not representative and must not be used for any quality
+    judgement. Sample-rate handling (16 kHz, unlike Piper's 22.05 kHz) and
+    latency are the meaningful signals here.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: mms
+  params:
+    model_name: facebook/mms-tts-vie

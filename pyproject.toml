@@ -1,0 +1,105 @@
+[project]
+name = "onevoice"
+version = "0.1.0"
+description = "OneVoice speech-to-speech translation benchmark framework"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "jiwer>=3.0",
+    "numpy>=1.26",
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "sacrebleu>=2.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+comet = [
+    "unbabel-comet>=2.2",
+    # unbabel-comet pins torchmetrics 0.10.x, which imports pkg_resources.
+    # setuptools >= 81 no longer ships it, so COMET fails to import with a
+    # modern setuptools. Pinned here rather than left to chance: without it
+    # comet_available() returns False and every COMET metric silently does
+    # not run - which is exactly how half the competition's accuracy
+    # criterion went unmeasured until D55.
+    "setuptools<81",
+]
+ko = [
+    "sacrebleu[ko]>=2.4",
+]
+asr = [
+    "transformers>=4.44",
+    "torch>=2.2",
+    # CTC beam-search decoding with an n-gram LM. Optional at runtime: the
+    # greedy path must still work when only the base ASR extra is installed.
+    "pyctcdecode>=0.5",
+    "kenlm>=0.3",
+]
+mt = [
+    "transformers>=4.44",
+    "torch>=2.2",
+    "sentencepiece>=0.2",
+    "sacremoses>=0.1",
+]
+tts-piper = [
+    "piper-tts>=1.2",
+    "onnxruntime>=1.18",
+]
+# VieNeu-TTS v3 Turbo (D79). Own environment, .venv-tts-vieneu. onnxruntime
+# 1.23+ refuses ONNX external data behind Hugging Face cache symlinks.
+tts-vieneu = [
+    "vieneu>=3.8.3",
+    "onnxruntime>=1.18,<1.23",
+]
+corpus = [
+    "datasets>=2.20",
+    "soundfile>=0.12",
+]
+vad = [
+    "silero-vad>=5.1",
+]
+# faster-whisper (CTranslate2) ASR with INT8 quantization
+asr-faster-whisper = [
+    "faster-whisper>=1.0",
+    "resampy>=0.4",
+]
+# MOS stimulus preparation (D71/D72). Installed only into .venv-tts-prep, never a
+# model environment. soxr and pyloudnorm are pinned exactly because the frozen
+# protocol names these versions.
+tts-prep = [
+    "soxr==1.1.0",
+    "pyloudnorm==0.2.0",
+    "soundfile>=0.12",
+    "scipy>=1.11",
+]
+# MeloTTS is deliberately absent - see D36. It pins transformers==4.27.4,
+# irreconcilable with the >=4.44 Whisper and NLLB need, and Piper covers
+# vi/en/zh/ko on its own.
+models = [
+    "onevoice[asr,mt,tts-piper,vad]",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/onevoice"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+# Local, untracked report extract; not part of the package or a CI checkout.
+exclude = ["DMH_OVC"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+markers = ["slow: needs an optional heavy dependency or a model download"]

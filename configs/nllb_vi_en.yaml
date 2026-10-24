@@ -1,0 +1,25 @@
+# NLLB vi->en, Branch B's other many-to-many candidate. src/tgt are this
+# framework's Language codes (vi/en); NLLBMT maps them to FLORES-200
+# internally (vie_Latn/eng_Latn) - see src/onevoice/components/m2m_mt.py.
+# ASR and TTS are still dummies, so the MT stage can be measured in
+# isolation (mirrors configs/opus_vi_en.yaml from Task 3).
+experiment:
+  name: nllb_vi_en
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: nllb
+  params:
+    model_name: facebook/nllb-200-distilled-600M
+
+tts:
+  model: silence

@@ -1,0 +1,28 @@
+# Rollback target for the Phase 5.0 checkpoint experiment (D26).
+#
+# If an arm proves unrunnable or the experiment is abandoned, this is the
+# documented revert: whisper-small remains the reference (D27) and the
+# all-dummy path still runs and still scores. Exercised automatically by
+# tests/test_rollback.py's glob, so the path is proven rather than claimed.
+experiment:
+  name: rollback_phase5_whisper
+  classification: smoke
+  notes: >-
+    All-dummy rollback target for Phase 5.0. Produces no meaningful quality or
+    latency figures by design.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: silence

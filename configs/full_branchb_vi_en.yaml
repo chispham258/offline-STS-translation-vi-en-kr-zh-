@@ -1,0 +1,42 @@
+# First configuration with no dummy component in it (Task 9).
+#
+# Branch B: Whisper-small ASR -> m2m100 many-to-many -> Piper Vietnamese TTS.
+# EnergyVAD remains because Silero waits on Q7's lookback buffer (Task 10/11).
+#
+# BASELINE ONLY. No tuning, no optimisation, no parameter search. Whatever this
+# measures is the number; improving it is Phase 5's job, not this task's.
+experiment:
+  name: full_branchb_vi_en
+  notes: >-
+    End-to-end baseline over FLEURS vi->en. The TTS voice is Vietnamese while the
+    translation target is English, so the synthesized audio is not linguistically
+    meaningful and must not be used for quality judgement - it exercises the TTS
+    stage and its latency. Translation quality here is BLEU/chrF against the
+    FLoRes English reference; ASR quality is WER/CER against the Vietnamese
+    transcript. Boundary source is file_extent, so no VAD accuracy is claimed.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+
+asr:
+  model: whisper
+  params:
+    model_name: openai/whisper-small
+    device: cpu
+
+# src_lang/tgt_lang are NOT repeated here: build() forwards them from the
+# languages block above, and setting both sources raises by design.
+mt:
+  model: m2m100
+  params:
+    model_name: facebook/m2m100_418M
+
+tts:
+  model: piper
+  params:
+    voice: vi_VN-vais1000-medium
+

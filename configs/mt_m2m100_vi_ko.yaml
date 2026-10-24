@@ -1,0 +1,19 @@
+# MT candidate: m2m100, vi->ko. Pre-registered 2026-08-15; delta fixed before this ran.
+experiment:
+  name: mt_m2m100_vi_ko
+  classification: development
+  notes: >-
+    MT candidate run for vi->ko, text-to-text, same corpus as the incumbent.
+languages:
+  src: vi
+  tgt: ko
+vad:
+  model: energy
+asr:
+  model: echo
+mt:
+  model: m2m100
+  params:
+    model_name: facebook/m2m100_418M
+tts:
+  model: silence

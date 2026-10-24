@@ -1,0 +1,29 @@
+# Vietnamese TTS - VieNeu-TTS v3 Turbo, adopted by owner decision (D79).
+#
+# TTS-only: synthesises manifest text through run_tts_benchmark. VAD/ASR/MT are
+# the dummies the TTS benchmark never calls. Run in .venv-tts-vieneu. Change
+# `voice` to any preset; the wrapper refuses an unknown name. Not a Phase 6C
+# selection result: no MOS stands behind this choice.
+experiment:
+  name: tts_vi_vieneu
+  notes: >-
+    Vietnamese TTS with VieNeu-TTS v3 Turbo, Northern preset voice, ONNX/CPU
+    fp32, 48 kHz. Owner-chosen component (D79); no naturalness claim.
+
+languages:
+  src: en
+  tgt: vi
+
+vad:
+  model: energy
+
+asr:
+  model: echo
+
+mt:
+  model: identity
+
+tts:
+  model: vieneu
+  params:
+    voice: Mai Anh

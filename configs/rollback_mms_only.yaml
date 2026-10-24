@@ -1,0 +1,17 @@
+# Rollback target for the MMS TTS integration (D26).
+experiment:
+  name: rollback_mms_only
+  notes: All-dummy rollback target; produces no meaningful figures by design.
+
+languages:
+  src: vi
+  tgt: en
+
+vad:
+  model: energy
+asr:
+  model: echo
+mt:
+  model: identity
+tts:
+  model: silence

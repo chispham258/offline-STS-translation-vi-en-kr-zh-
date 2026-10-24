@@ -1,0 +1,80 @@
+{
+  "components": {
+    "asr": {
+      "commit_hash": "69e9000591623e5a4fc2f502407860bcdc0de0b2",
+      "component": "wav2vec2",
+      "implementation": "onevoice.components.wav2vec2_asr.Wav2Vec2ASR",
+      "invocation": {
+        "alpha": 0.5,
+        "beam_width": 100,
+        "beta": 1.5,
+        "decode": "ctc_beam_lm",
+        "lm_path": "models/wav2vec2-vi-lm/vi_lm_4grams.bin",
+        "lm_sha256": "d76758da6881a2e48110fd34566a756c92cfdfe7a232c6fd79382eb28a755f2c",
+        "lm_size_bytes": 1423582823,
+        "src_lang": "vi",
+        "task": "transcribe"
+      },
+      "model_id": "nguyenvulebinh/wav2vec2-base-vietnamese-250h",
+      "params_hash": "f346d6a2005a2619c4cb905c9f26856f9d8de19cde754ace578c681bcc95473d",
+      "revision": "default",
+      "tokenizer_revision": "same-repo-as-model"
+    },
+    "mt": {
+      "commit_hash": "840bc88104d5a4277af740eaedb024df8c3093e7",
+      "component": "envit5",
+      "implementation": "onevoice.components.t5_mt.EnViT5MT",
+      "invocation": {
+        "prefix": "vi: ",
+        "route": "direct",
+        "src_lang": "vi",
+        "tgt_lang": "en"
+      },
+      "model_id": "VietAI/envit5-translation",
+      "params_hash": "c81c6f4ac5c9cbdaf648e214f339b7d792f1daa4987b1e3cdae0cdf182b0f0fd",
+      "revision": "default",
+      "tokenizer_revision": "same-repo-as-model"
+    },
+    "tts": {
+      "backend_key": "en",
+      "backend_model": "piper",
+      "component": "piper",
+      "implementation": "onevoice.components.piper_tts.PiperTTS",
+      "invocation": {
+        "sample_rate": 22050,
+        "tgt_lang": "en",
+        "voice": "en_US-lessac-medium"
+      },
+      "language": "en",
+      "model_id": "rhasspy/piper-voices",
+      "params_hash": "a0e335ae759b56f2327a7d3d7172c6de15d35b9fd0cb142d2141cc54d4bb3bb6",
+      "revision": "default",
+      "router": "language_router",
+      "weight_bytes": 63201294,
+      "weight_hash": "5efe09e69902187827af646e1a6e9d269dee769f9877d17b16b1b46eeaaf019f"
+    }
+  },
+  "config": "runs/bakeoff_vi_en/asr_wav2vec2_lm_full200_pipeline/config.used.yaml",
+  "config_hash": "ea1d7cd7566d40e3e794506cc0fe980c3dafa08840e024546931307ad0633e4e",
+  "config_path": "runs/bakeoff_vi_en/asr_wav2vec2_lm_full200_pipeline/config.used.yaml",
+  "config_snapshot": "config.snapshot.yaml",
+  "duration_seconds": 581.101,
+  "experiment": "asr_wav2vec2_lm_full200_pipeline",
+  "finished_at": "2026-10-22T18:53:28.569771+00:00",
+  "framework_commit": "c0be34228a5a4f49a92ee994593eee38d22f51ea",
+  "framework_dirty": true,
+  "host": {
+    "arch": "arm64",
+    "cpu": "arm",
+    "os": "Darwin",
+    "python": "3.11.14"
+  },
+  "refs": "corpora/fleurs_vi_en_200/refs.jsonl",
+  "refs_hash": "7eb65bafa0634292ed117209ca380e0a8d567c456710cba1d3917cac72971aa0",
+  "refs_path": "corpora/fleurs_vi_en_200/refs.jsonl",
+  "started_at": "2026-10-22T18:43:47.469126+00:00",
+  "status": "complete",
+  "utterances_fresh": 200,
+  "utterances_resumed": 0,
+  "utterances_total": 200
+}

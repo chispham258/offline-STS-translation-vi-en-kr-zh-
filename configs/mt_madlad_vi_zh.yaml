@@ -1,0 +1,19 @@
+# MT candidate: madlad, vi->zh. Pre-registered 2026-08-15; delta fixed before this ran.
+experiment:
+  name: mt_madlad_vi_zh
+  classification: development
+  notes: >-
+    MT candidate run for vi->zh, text-to-text, same corpus as the incumbent.
+languages:
+  src: vi
+  tgt: zh
+vad:
+  model: energy
+asr:
+  model: echo
+mt:
+  model: madlad
+  params:
+    model_name: google/madlad400-3b-mt
+tts:
+  model: silence

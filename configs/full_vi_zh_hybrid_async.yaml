@@ -1,0 +1,67 @@
+# vi -> zh on the same async pipeline: streaming ASR + m2m100 + Piper Chinese.
+# See full_vi_en_hybrid_async.yaml for the router rationale.
+
+experiment:
+  name: full_vi_zh_hybrid_async
+  classification: development
+  notes: vi->zh multilingual TTS arm (Piper Chinese), Whisper base CPU validation
+
+languages:
+  src: vi
+  tgt: zh
+
+pipeline:
+  enabled: true
+  queue_sizes:
+    vad_asr: 128
+    asr_mt: 64
+    mt_tts: 64
+
+# Silero endpointing for Vietnamese: 700 ms bridges short pauses without the
+# 1 s turn-taking delay of 1000 ms. Multi-segment utterances are handled by
+# the driver, so this value is not asked to bridge the 1.1 s pause in utt 1660.
+vad:
+  model: silero
+  params:
+    threshold: 0.5
+    min_silence_duration_ms: 700
+    speech_pad_ms: 30
+
+asr:
+  model: faster_whisper
+  params:
+    model_name: base
+    device: cpu
+    compute_type: int8
+    beam_size: 1
+    num_workers: 4
+
+mt:
+  model: m2m100
+  params:
+    model_name: facebook/m2m100_418M
+
+tts:
+  model: language_router
+  params:
+    backends:
+      vi:
+        module: onevoice.components.piper_tts
+        model: piper
+        params:
+          voice: vi_VN-vais1000-medium
+      en:
+        module: onevoice.components.piper_tts
+        model: piper
+        params:
+          voice: en_US-lessac-medium
+      zh:
+        module: onevoice.components.piper_tts
+        model: piper
+        params:
+          voice: zh_CN-huayan-medium
+      ko:
+        module: onevoice.components.piper_tts
+        model: piper
+        params:
+          voice: ko_KR-kss-medium
