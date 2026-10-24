@@ -6,7 +6,7 @@ device prediction. Dates are next to each table.
 
 Conventions:
 
-- **Bold** = module selected as main / deployment candidate.
+- **Bold** = module selected as main / host deployment candidate.
 - `RTF` = time after the final speech frame / audio duration; it **misses** work
   inside `push()`.
 - `pipeline_rtf` = `stream_start` → `tts_done` / audio duration; this is the
@@ -52,8 +52,8 @@ Other pairs are configurable, not validated.
 Reading:
 
 - **wav2vec2 + LM** is the only arm meeting WER < 0.15, COMET > 0.75 and
-  pipeline RTF < 0.60 simultaneously. It misses BLEU > 20. Deployment candidate
-  (D80).
+  pipeline RTF < 0.60 simultaneously. It misses BLEU > 20. Host deployment
+  candidate (D80).
 - **PhoWhisper-large** is the first full-200 arm with BLEU > 20 and the highest
   COMET, but RTF 1.078 means it cannot be deployed on this host. The absolute
   BLEU CI `[18.34, 22.30]` still contains 20, so the > 20 target is **not
@@ -104,7 +104,7 @@ delta = 0.0175.
 | **turbo** | **0.0908** | reference | — | kept as working reference |
 
 Conclusion: **D60 ASR selection remains UNRESOLVED**; the n=400 escalation was
-not run. wav2vec2 + LM was later chosen under the deployment gate (D80), not
+not run. wav2vec2 + LM was later chosen under the host deployment gate (D80), not
 D60.
 
 ---
@@ -262,13 +262,47 @@ the 0.6 gate.
 
 \* Absolute BLEU CI `[18.34, 22.30]` contains 20 → not resolved.
 
-Deployment conclusion: **D80 wav2vec2 + LM**. **PhoWhisper-large** is the quality
+Host deployment conclusion: **D80 wav2vec2 + LM**. **PhoWhisper-large** is the quality
 leader but speed-blocked. The next path is backend/device work (ONNX Runtime,
 whisper.cpp/GGML, QNN/NPU), not another model family (D84).
 
 ---
 
-## 10. Known limitation (Q6)
+## 10. Edge-device readiness
+
+**Status: unproven.** No Snapdragon or other edge device has been run, and no
+NPU backend has been exercised. The only measured host is Apple M1 (16 GiB),
+CPU. Host RTF and RSS are not device predictions.
+
+No target device profile (SoC, RAM, OS, runtime, quantization, thread count) is
+fixed, so "Snapdragon-class" is not yet a testable target.
+
+| Evidence | Measured on M1 | Edge status |
+|---|---|---|
+| D80 pipeline latency | RTF p50 0.196 / p95 0.327 | no device run |
+| D80 peak RSS | 1.79 GB full-200; 2.36 GB worst utterance | no device run |
+| D80 ASR artifact | KenLM 1.36 GB, CC-BY-NC-4.0 | total bundle unmeasured; non-commercial licence |
+| PhoWhisper-large artifact | 1.5 GB CT2 INT8 | quality leader, RTF 1.078; not a candidate |
+| Component init | 6.35–7.03 s warm; 11.8 s cold | app cold start unmeasured |
+| NPU / ONNX / QNN | not run | missing |
+| Power / thermal / sustained load | not measured | missing |
+| Install size / binary size | not measured | missing |
+
+Host peak RSS is process RSS on a 16 GiB M1. It excludes the device OS, audio
+stack, and accelerator memory, so it is not a device RAM budget.
+
+What would justify an edge claim:
+
+- a named SoC, RAM, OS, runtime, quantization, and thread count;
+- a 200-utterance, batch-1 run with p50/p95 pipeline RTF and peak RSS;
+- cold start, sustained load, power, and thermal measurements;
+- total installed bundle size and licence review.
+
+Until then, describe the project as **offline on M1 CPU**, not edge-ready.
+
+---
+
+## 11. Known limitation (Q6)
 
 > **Known limitation (Q6).** `rtf` and `end_to_speech_ms` measure only work
 > performed after the final speech frame, so neither captures per-frame work
@@ -284,7 +318,7 @@ whisper.cpp/GGML, QNN/NPU), not another model family (D84).
 
 ---
 
-## 11. Sources and limits
+## 12. Sources and limits
 
 - Full decision ledger D1–D85: `docs/KNOWLEDGE.md`.
 - Pipeline stages and async mechanism: `docs/ARCHITECTURE.md`.
@@ -293,8 +327,9 @@ whisper.cpp/GGML, QNN/NPU), not another model family (D84).
 - Design spec, detailed investigations and the old per-run benchmark reports are
   **not** in this checkout. Their numbers are preserved in this file and in
   `results/`; paths inside `KNOWLEDGE.md` are historical references.
-- No Snapdragon device: every RTF is host M1, not a device prediction.
+- Edge-device readiness is unproven; see §10. Every RTF and RSS is host M1, not
+  a device prediction.
 - No valid MOS: no naturalness conclusion for any TTS.
-- D60 ASR selection is UNRESOLVED; D80 is a deployment decision, not a selection.
+- D60 ASR selection is UNRESOLVED; D80 is a host deployment decision, not a selection.
 - Only pairs marked in [`README.md` § Language coverage](../README.md#language-coverage)
   have measured end-to-end evidence.

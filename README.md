@@ -1,7 +1,9 @@
 # OneVoice
 
-Speech-to-speech translation framework for **fully offline Snapdragon-class
-hardware**. The language set is fixed:
+Speech-to-speech translation framework for **offline deployment**. The design
+target is Snapdragon-class edge devices, but **edge suitability is not yet
+measured** — every number in this repository is host Apple M1 CPU. The language
+set is fixed:
 
 `L = {vi, en, zh, ko}`
 
@@ -69,15 +71,16 @@ Model weights live in `models/` (gitignored). Extras are in `pyproject.toml`.
 
 ## Results at a glance
 
-All numbers are host Apple M1 CPU, not Snapdragon.
+All numbers are host Apple M1 CPU, not edge-device measurements.
 
 | Direction | N | Arm | WER_norm | BLEU | COMET | pipeline RTF p50 | Note |
 |---|---:|---|---:|---:|---:|---:|---|
-| vi→en | 200 | D80 wav2vec2 + 4-gram LM | 0.1373 | 17.51 | 0.7545 | **0.196** | deployment candidate |
+| vi→en | 200 | D80 wav2vec2 + 4-gram LM | 0.1373 | 17.51 | 0.7545 | **0.196** | host deployment candidate |
 | vi→en | 200 | PhoWhisper-large | 0.0912 | **20.26** | **0.7907** | 1.078 | quality leader; RTF fail |
 | en→vi | 200 | whisper-base + envit5 + Piper vi | 0.1753 | **26.60** | 0.7691 | **0.2425** | measured |
 
 Parameters, tables and caveats: [`docs/RESULTS.md`](docs/RESULTS.md).
+Host metrics and missing edge evidence: [`docs/RESULTS.md` § Edge-device readiness](docs/RESULTS.md#10-edge-device-readiness).
 
 ## Repository
 
@@ -102,7 +105,8 @@ docs/            architecture, results, decision ledger
 
 ## Status
 
-- vi→en deployment candidate: D80 wav2vec2 + 4-gram LM.
-- No Snapdragon device: every RTF is host M1.
+- vi→en host deployment candidate: D80 wav2vec2 + 4-gram LM.
+- Edge target is Snapdragon-class; no named device, no NPU run, and no device
+  RTF/RSS/power/thermal measurement. Host M1 results do not establish fit.
 - No valid MOS: VieNeu is an owner decision, not a benchmark win.
-- D60 ASR selection is unresolved; D80 is a deployment choice.
+- D60 ASR selection is unresolved; D80 is a host deployment choice.
